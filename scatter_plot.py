@@ -12,34 +12,40 @@ import pandas as pd
 import glob
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import sys
-import time
+import numpy as np
 
 
 def _update_plot(i, fig, scat_x, scat_pbest, scat_G):
     swrm_size = 3
     min_num = i * swrm_size
     max_num = min_num + swrm_size
-    scat_x.set_offsets((horizon_x[min_num:max_num],
-                        vertical_x[min_num:max_num]))
-    scat_pbest.set_offsets((horizon_pbest[min_num:max_num],
-                            vertical_pbest[min_num:max_num]))
+
+    x_sets = np.vstack((horizon_x[min_num:max_num],
+                        vertical_x[min_num:max_num])).T
+    pbest_sets = np.vstack((horizon_pbest[min_num:max_num],
+                            vertical_pbest[min_num:max_num])).T
+
+    print('x_sets')
+    print(x_sets)
+    print('pbest_sets')
+    print(pbest_sets)
+
+    scat_x.set_offsets(x_sets)
+    scat_pbest.set_offsets(pbest_sets)
     scat_G.set_offsets((horizon_G[i], vertical_G[i]))
 
-    print(min_num)
-    print(max_num)
-    
+    # print(min_num)
+    # print(max_num)
+
     print('G')
     print(horizon_G[i])
     print(vertical_G[i])
-    
+
     print('pbest')
     print(horizon_pbest[min_num:max_num])
     print(vertical_pbest[min_num:max_num])
-    
+
     print('Frames: %d' % i)
-    # if i == 0:
-    #    time.sleep(10)
     plt.title('Generation=' + str(i) + ", Fuction Evaluatio=" + str(min_num))
 
     return scat_x,
