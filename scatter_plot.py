@@ -99,11 +99,11 @@ if 0 <= num_int < len(csv_files):
     ax.set_ylabel('Dim' + y_dim)
 
     scat_x = plt.scatter(horizon_x, vertical_x,
-                         c='red', marker='.', s=60)
+                         c='red', marker='.', s=20)
     scat_pbest = plt.scatter(horizon_pbest, vertical_pbest,
                              c='blue', marker='x', s=20)
     scat_G = plt.scatter(horizon_G, vertical_G,
-                         c='green', marker='*', s=10)
+                         c='green', marker='*', s=30)
 
     max_gen = max(scatter['Generation'])
     swrm_size = max(scatter['individual_index']) + 1
