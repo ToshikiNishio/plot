@@ -14,9 +14,13 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 
+swrm_size  # Global definition
+
 
 def _update_plot(i, fig, scat_x, scat_pbest, scat_G):
-    swrm_size = 3
+    global swrm_size
+    print('swrm_size')
+    print(swrm_size)
     min_num = i * swrm_size
     max_num = min_num + swrm_size
 
@@ -50,9 +54,8 @@ def _update_plot(i, fig, scat_x, scat_pbest, scat_G):
 
     return scat_x,
 
+
 csv_files = glob.glob('*/RUN*/scatter.csv')
-
-
 print('散布図のアニメーションを表示する試行を入力してください。　(Exam: 4)')
 num = input('>>>  ')
 if num.isdigit():
@@ -103,9 +106,11 @@ if 0 <= num_int < len(csv_files):
                          c='green', marker='*', s=10)
 
     max_gen = max(scatter['Generation'])
+    swrm_size = max(scatter['individual_index']) + 1
+    print(swrm_size)
     anim = animation.FuncAnimation(fig, _update_plot,
                                    fargs=(fig, scat_x, scat_pbest, scat_G),
-                                   frames=max_gen, interval=100)
+                                   frames=max_gen, interval=1)
 
     plt.show()
 
