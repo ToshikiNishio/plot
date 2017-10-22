@@ -58,19 +58,22 @@ def _update_plot(i, fig, scat_x, scat_pbest, scat_G, swrm_size):
     return scat_x,
 
 
-def inputNum():
+def inputNum(isStr):
     while True:
         num = input('>>>  ')
         if num.isdigit():
-            num_int = int(num)
-            return num_int
+            if isStr:
+                return num
+            else:
+                num_int = int(num)
+                return num_int
         else:
             print('数値を入力してください')
 
 if __name__ == '__main__':
     csv_files = glob.glob('*/RUN*/scatter.csv')
     print('散布図のアニメーションを表示する試行を入力してください。　(Exam: 4)')
-    num = inputNum()
+    num = inputNum(isStr=False)
 
     if 0 <= num < len(csv_files):
         print('試行' + str(num) + 'の散布図のアニメーションを表示します')
@@ -82,9 +85,9 @@ if __name__ == '__main__':
 
         print("x軸,y軸の次元を選択してください")
         print("x軸の次元 (Exam : 4)")
-        x_dim = input('>>>  ')
+        x_dim = inputNum(isStr=True)
         print("y軸の次元 (Exam : 4)")
-        y_dim = input('>>>  ')
+        y_dim = inputNum(isStr=True)
 
         horizon_x = scatter['X' + x_dim]
         vertical_x = scatter['X' + y_dim]
