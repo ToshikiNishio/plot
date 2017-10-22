@@ -32,6 +32,7 @@ def getMean():
 
 def outputMeanFit():
     print('平均適応度を出力します')
+    mean, csv_files = getMean()
     # 平均適応度のプロット
     fit = mean[['eval_times', 'Mean Fitness']]
     fit.plot(x='eval_times', logy=True)     # logスケールでのfitness出力
@@ -40,6 +41,7 @@ def outputMeanFit():
 def outputAllFit():
     print('全ての試行と比較します。')
     # 平均適応度のデータフレーム作成
+    mean, csv_files = getMean()
     fit = mean[['eval_times', 'Mean Fitness']]
     # それぞれの試行をデータフレームに追加
     for f in csv_files:
@@ -52,7 +54,18 @@ def outputAllFit():
     fit.plot(x='eval_times', logy=True)     # logスケールでのfitness出力
 
 
-def outputCompFit():
+def outputCompFit(num):
+    mean, csv_files = getMean()
+    if num.isdigit():
+        num_int = int(num)
+    else:
+        print('数字を入力してください')
+        return
+
+    if num_int < 0 or len(csv_files) <= num_int:
+        print('存在しない試行です')
+        return
+
     print('試行' + num + 'と平均適応度の比較を出力します')
     fit = mean[['eval_times', 'Mean Fitness']]
     file = glob.glob('*/RUN' + num + '/output.csv')
@@ -67,8 +80,6 @@ if __name__ == '__main__':
     print('全ての試行と比較する場合 : all')
     print('平均適応度だけ出力する場合 : mean')
 
-    mean, csv_files = getMean()
-
     num = input('>>>  ')
     if num.isdigit():
         num_int = int(num)
@@ -77,7 +88,7 @@ if __name__ == '__main__':
         outputMeanFit()
     elif num == 'all':
         outputAllFit()
-    elif 0 <= num_int < len(csv_files):
-        outputCompFit()
+    elif num.isdigit():
+        outputCompFit(num)
     else:
-        print('存在しない試行です')
+        print('Invalid input')
