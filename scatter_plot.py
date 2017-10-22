@@ -70,6 +70,32 @@ def inputNum(isStr):
         else:
             print('数値を入力してください')
 
+
+def getX():
+    horizon_x = scatter['X' + x_dim]
+    vertical_x = scatter['X' + y_dim]
+
+    return horizon_x, vertical_x
+
+
+def getPbest():
+    horizon_pbest = scatter['pBest' + x_dim]
+    vertical_pbest = scatter['pBest' + y_dim]
+
+    return horizon_pbest, vertical_pbest
+
+
+def getG():
+    horizon_G = scatter[scatter['G_index'] == scatter['individual_index']]
+    horizon_G = horizon_G['pBest' + x_dim]
+    horizon_G.reset_index(drop=True, inplace=True)
+    # horizon_G = horizon_G.copy()
+    vertical_G = scatter[scatter['G_index'] == scatter['individual_index']]
+    vertical_G = vertical_G['pBest' + y_dim]
+    vertical_G.reset_index(drop=True, inplace=True)
+
+    return horizon_G, vertical_G
+
 if __name__ == '__main__':
     csv_files = glob.glob('*/RUN*/scatter.csv')
     print('散布図のアニメーションを表示する試行を入力してください。　(Exam: 4)')
@@ -79,29 +105,11 @@ if __name__ == '__main__':
         print('試行' + str(num) + 'の散布図のアニメーションを表示します')
         scatter = pd.read_csv(csv_files[num], header=0, sep=',')
 
-        # ↓なぜ定義したのか
-        # eval_times = scatter['eval_times']
-        # eval_times = eval_times.drop_duplicates()
-
         print("x軸,y軸の次元を選択してください")
         print("x軸の次元 (Exam : 4)")
         x_dim = inputNum(isStr=True)
         print("y軸の次元 (Exam : 4)")
         y_dim = inputNum(isStr=True)
-
-        horizon_x = scatter['X' + x_dim]
-        vertical_x = scatter['X' + y_dim]
-
-        horizon_pbest = scatter['pBest' + x_dim]
-        vertical_pbest = scatter['pBest' + y_dim]
-
-        horizon_G = scatter[scatter['G_index'] == scatter['individual_index']]
-        horizon_G = horizon_G['pBest' + x_dim]
-        horizon_G.reset_index(drop=True, inplace=True)
-        # horizon_G = horizon_G.copy()
-        vertical_G = scatter[scatter['G_index'] == scatter['individual_index']]
-        vertical_G = vertical_G['pBest' + y_dim]
-        vertical_G.reset_index(drop=True, inplace=True)
 
         fig = plt.figure()
 
@@ -110,10 +118,13 @@ if __name__ == '__main__':
         ax.set_xlabel('Dim' + x_dim)
         ax.set_ylabel('Dim' + y_dim)
 
+        horizon_x, vertical_x = getX()
         scat_x = plt.scatter(horizon_x, vertical_x,
                              c='red', marker='.', s=20)
+        horizon_pbest, vertical_pbest = getPbest()
         scat_pbest = plt.scatter(horizon_pbest, vertical_pbest,
                                  c='blue', marker='x', s=20)
+        horizon_G, vertical_G = getG()
         scat_G = plt.scatter(horizon_G, vertical_G,
                              c='green', marker='*', s=30)
 
