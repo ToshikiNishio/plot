@@ -13,6 +13,7 @@ import glob
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
+from plot import outputCompFit
 
 
 def _update_plot(i, fig, scat_x, scat_pbest, scat_G, swrm_size):
@@ -102,6 +103,7 @@ if __name__ == '__main__':
     num = inputNum(isStr=False)
 
     if 0 <= num < len(csv_files):
+        outputCompFit(str(num)).plot(x='eval_times', logy=True)
         print('試行' + str(num) + 'の散布図のアニメーションを表示します')
         scatter = pd.read_csv(csv_files[num], header=0, sep=',')
 
