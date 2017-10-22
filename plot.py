@@ -35,7 +35,8 @@ def outputMeanFit():
     mean, csv_files = getMean()
     # 平均適応度のプロット
     fit = mean[['eval_times', 'Mean Fitness']]
-    fit.plot(x='eval_times', logy=True)     # logスケールでのfitness出力
+
+    return fit
 
 
 def outputAllFit():
@@ -51,7 +52,7 @@ def outputAllFit():
         one_out = one_out.rename(columns={'Best_fitness': rename})
         fit = pd.concat([fit, one_out[rename]], axis=1)
 
-    fit.plot(x='eval_times', logy=True)     # logスケールでのfitness出力
+    return fit
 
 
 def outputCompFit(num):
@@ -72,7 +73,8 @@ def outputCompFit(num):
     one_out = pd.read_csv(file[0], header=0, sep=',')
     com_fit = pd.concat([fit, one_out['Best_fitness']], axis=1)
     com_fit = com_fit.rename(columns={'Best_fitness': 'Run' + num})
-    com_fit.plot(x='eval_times', logy=True)     # logスケールでのfitness出力else:
+    
+    return com_fit
 
 
 if __name__ == '__main__':
@@ -85,10 +87,10 @@ if __name__ == '__main__':
         num_int = int(num)
 
     if num == 'mean':
-        outputMeanFit()
+        outputMeanFit().plot(x='eval_times', logy=True)
     elif num == 'all':
-        outputAllFit()
+        outputAllFit().plot(x='eval_times', logy=True)
     elif num.isdigit():
-        outputCompFit(num)
+        outputCompFit(num).plot(x='eval_times', logy=True)
     else:
         print('Invalid input')
